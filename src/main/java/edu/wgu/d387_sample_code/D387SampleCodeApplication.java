@@ -7,46 +7,46 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+
+import static java.util.concurrent.Executors.newFixedThreadPool;
 
 
 @SpringBootApplication
 public class D387SampleCodeApplication {
-
-	private final List<String> messages = new ArrayList<>();
+	static ExecutorService messageExecutor = newFixedThreadPool(5);
 
 	public static void main(String[] args) {
 		SpringApplication.run(D387SampleCodeApplication.class, args);
-		Thread englishThread = new Thread(() -> displayWelcomeMessage("welcome_en_US.properties"));
-		Thread frenchThread = new Thread(() -> displayWelcomeMessage("welcome_fr_CA.properties"));
-
-		englishThread.start();
-		frenchThread.start();
-
-		try {
-			englishThread.join();
-			frenchThread.join();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void displayWelcomeMessage(String propFile) {
 		Properties prop = new Properties();
-		try {
-			InputStream stream = new ClassPathResource(propFile).getInputStream();
-			prop.load(stream);
-			String welcome = prop.getProperty("welcome");
-			System.out.println(welcome);
+		messageExecutor.execute(() -> {
+			try {
+				InputStream stream = new ClassPathResource("welcome_en_US.properties").getInputStream();
+				prop.load(stream);
+				String welcome = prop.getProperty("welcome");
+				System.out.println(welcome);
 
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
+		messageExecutor.execute(() -> {
+			try {
+				InputStream stream = new ClassPathResource("welcome_fr_CA.properties").getInputStream();
+				prop.load(stream);
+				String welcome = prop.getProperty("welcome");
+				System.out.println(welcome);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
-
-
 }
+
+
+
+
+
