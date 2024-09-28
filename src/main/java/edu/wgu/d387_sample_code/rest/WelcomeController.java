@@ -10,4 +10,6 @@ import java.util.List;
 @RestController
 public class WelcomeController {
 
+    @GetMapping("/messages")
+    public List<String> getMessages() { return D387SampleCodeApplication.getMessages(); }
 }
