@@ -21,7 +21,7 @@ public class WelcomeController {
     @RequestMapping(path = "/presentation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String showPresentation() {
         List<String> times = D387SampleCodeApplication.getPresTimes();
-        String presAnnouncement = "Join us for a live presentation at: ";
+        String presAnnouncement = "Join us for a live presentation Satruday, November 2nd at: ";
         String time_string = presAnnouncement + "\n" + times.get(0) + "EST\n" + times.get(1) + "MST\n" + times.get(2) + "UTC";
         return time_string;
     }
