@@ -1,10 +1,9 @@
 package edu.wgu.d387_sample_code.rest;
 
 import edu.wgu.d387_sample_code.D387SampleCodeApplication;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,5 +15,14 @@ public class WelcomeController {
     public String getMessages() {
         List<String> messageList = D387SampleCodeApplication.getMessages();
         return String.join(" ", messageList);
+    }
+
+
+    @RequestMapping(path = "/presentation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String showPresentation() {
+        List<String> times = D387SampleCodeApplication.getPresTimes();
+        String presAnnouncement = "Join us for a live presentation at: ";
+        String time_string = presAnnouncement + "\n" + times.get(0) + "EST\n" + times.get(1) + "MST\n" + times.get(2) + "UTC";
+        return time_string;
     }
 }

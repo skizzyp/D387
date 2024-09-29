@@ -28,10 +28,13 @@ export class AppComponent implements OnInit{
   currentCheckInVal!:string;
   currentCheckOutVal!:string;
   messages!: Observable<string>;
+  presentation!: Observable<string>;
 
     ngOnInit(){
-
+      //welcome message
       this.messages = this.httpClient.get(this.baseURL + '/messages', {responseType: "text"});
+      //presentation announcement
+      this.presentation = this.httpClient.get(this.baseURL + '/presentation', {responseType: "text"});
       this.roomsearch= new FormGroup({
         checkin: new FormControl(' '),
         checkout: new FormControl(' ')
@@ -53,7 +56,7 @@ export class AppComponent implements OnInit{
 
     onSubmit({value,valid}:{value:Roomsearch,valid:boolean}){
       this.getAll().subscribe(
-
+        // although not required, this method pulls price data, converts it, puts it back to string, and then sets variables
         rooms => {
           console.log(Object.values(rooms)[0]);
           this.rooms=<Room[]>Object.values(rooms)[0];
